@@ -15,7 +15,9 @@ class OpcacheClearCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $webDir = $this->getContainer()->getParameter('sixdays_opcache.web_dir');
+        $webDir     = $this->getContainer()->getParameter('sixdays_opcache.web_dir');
+        $hostName   = $this->getContainer()->getParameter('sixdays_opcache.host_name');
+        $hostIp     = $this->getContainer()->getParameter('sixdays_opcache.host_ip');
 
         if (!is_dir($webDir)) {
             throw new \InvalidArgumentException(sprintf('Web dir does not exist "%s"', $webDir));
@@ -35,21 +37,16 @@ class OpcacheClearCommand extends ContainerAwareCommand
             throw new \RuntimeException(sprintf('Unable to write "%s"', $file));
         }
 
-        if (!$host = $this->getContainer()->getParameter('sixdays_opcache.host')) {
-            $host = sprintf(
-                "%s://%s",
-                $this->getContainer()->getParameter('router.request_context.scheme'),
-                $this->getContainer()->getParameter('router.request_context.host')
-            );
-        }
+        $url = sprintf('http://%s/%s', $hostIp, $filename);
 
-        $url = $host.'/'.$filename;
-
-        $ch = curl_init($url);
+        $ch = curl_init();
         curl_setopt_array($ch, array(
-            CURLOPT_HEADER          => false,
+            CURLOPT_URL             => $url,
             CURLOPT_RETURNTRANSFER  => true,
-            CURLOPT_FAILONERROR     => true
+            CURLOPT_FAILONERROR     => true,
+            CURLOPT_HTTPHEADER      => [ sprintf('Host: %s', $hostName) ],
+            CURLOPT_HEADER          => false,
+            CURLOPT_SSL_VERIFYPEER  => false
         ));
 
         $result = curl_exec($ch);
@@ -62,8 +59,6 @@ class OpcacheClearCommand extends ContainerAwareCommand
         }
 
         curl_close($ch);
-
-        var_dump($result);
 
         $result = json_decode($result, true);
         unlink($file);
