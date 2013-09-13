@@ -43,8 +43,9 @@ Installation
 
           # app/config/config.yml
           sixdays_opcache:
-              host: http://example.com
-              web_dir: %kernel.root_dir%/../web
+              host_ip:    127.0.0.1:80
+              host_name:  example.com
+              web_dir:    %kernel.root_dir%/../web
 
 
 Usage
