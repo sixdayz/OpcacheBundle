@@ -24,9 +24,8 @@ class Configuration
         $treeBuilder->root('sixdays_opcache', 'array')
             ->isRequired()
             ->children()
-                ->scalarNode('host')->defaultFalse()->end()
+                ->scalarNode('host')->defaultNull()->end()
                 ->scalarNode('web_dir')->isRequired()->end()
-                ->scalarNode('mode')->defaultValue('fopen')->end()
             ->end()
         ->end();
 

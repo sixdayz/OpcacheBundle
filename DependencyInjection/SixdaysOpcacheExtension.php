@@ -14,11 +14,10 @@ class SixdaysOpcacheExtension extends Extension
         $configuration = new Configuration();
         $config = $processor->process($configuration->getConfigTree(), $configs);
 
-//        if ($config['host'] && strncmp($config['host'], 'http', 4) !== 0) {
-//            $config['host'] = 'http://'.$config['host'];
-//        }
-//        $container->setParameter('ornicar_apc.host', $config['host'] ? trim($config['host'], '/') : false);
-//        $container->setParameter('ornicar_apc.web_dir', $config['web_dir']);
-//        $container->setParameter('ornicar_apc.mode', $config['mode']);
+        if ($config['host'] && strncmp($config['host'], 'http', 4) !== 0) {
+            $config['host'] = 'http://'.$config['host'];
+        }
+        $container->setParameter('sixdays_opcache.host', $config['host'] ? trim($config['host'], '/') : false);
+        $container->setParameter('sixdays_opcache.web_dir', $config['web_dir']);
     }
 }
