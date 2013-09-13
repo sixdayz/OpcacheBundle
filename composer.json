@@ -14,15 +14,9 @@
         "symfony/framework-bundle": ">=2.1,<3.0",
         "php": ">=5.4.0"
     },
-    "extra": {
-        "branch-alias": {
-            "dev-1.0": "1.0.x-dev",
-            "dev-master": "1.1.x-dev"
-        }
-    },
     "autoload": {
         "psr-0": {
-            "Ornicar\\ApcBundle": ""
+            "Sixdays\\OpcacheBundle": ""
         }
     },
     "target-dir": "Sixdays/OpcacheBundle"
