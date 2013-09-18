@@ -4,6 +4,7 @@ namespace Sixdays\OpcacheBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class OpcacheClearCommand extends ContainerAwareCommand
@@ -12,8 +13,8 @@ class OpcacheClearCommand extends ContainerAwareCommand
     {
         $this->setDescription('Clear opcache cache')
             ->setName('opcache:clear')
-            ->addOption('host-name', null, null, 'Url for clear opcode cache')
-            ->addOption('host-ip', null, null, 'IP for clear opcode cache');
+            ->addOption('host-name', null, InputOption::VALUE_OPTIONAL, 'Url for clear opcode cache')
+            ->addOption('host-ip', null, InputOption::VALUE_OPTIONAL, 'IP for clear opcode cache');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
