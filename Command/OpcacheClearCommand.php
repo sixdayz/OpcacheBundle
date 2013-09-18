@@ -10,14 +10,21 @@ class OpcacheClearCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this->setDescription('Clear opcache cache')->setName('opcache:clear');
+        $this->setDescription('Clear opcache cache')
+            ->setName('opcache:clear')
+            ->addOption('host-name', null, null, 'Url for clear opcode cache')
+            ->addOption('host-ip', null, null, 'IP for clear opcode cache');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $webDir     = $this->getContainer()->getParameter('sixdays_opcache.web_dir');
-        $hostName   = $this->getContainer()->getParameter('sixdays_opcache.host_name');
-        $hostIp     = $this->getContainer()->getParameter('sixdays_opcache.host_ip');
+        $hostName   = $input->getOption('host-name')
+            ? $input->getOption('host-name')
+            : $this->getContainer()->getParameter('sixdays_opcache.host_name');
+        $hostIp     = $input->getOption('host-ip')
+            ? $input->getOption('host-ip')
+            : $this->getContainer()->getParameter('sixdays_opcache.host_ip');
 
         if (!is_dir($webDir)) {
             throw new \InvalidArgumentException(sprintf('Web dir does not exist "%s"', $webDir));
