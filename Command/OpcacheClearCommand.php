@@ -13,8 +13,8 @@ class OpcacheClearCommand extends ContainerAwareCommand
     {
         $this->setDescription('Clear opcache cache')
             ->setName('opcache:clear')
-            ->addOption('host-name', null, InputOption::VALUE_OPTIONAL, 'Url for clear opcode cache')
-            ->addOption('host-ip', null, InputOption::VALUE_OPTIONAL, 'IP for clear opcode cache');
+            ->addOption('host-name', null, InputOption::VALUE_REQUIRED, 'Url for clear opcode cache')
+            ->addOption('host-ip', null, InputOption::VALUE_REQUIRED, 'IP for clear opcode cache');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
