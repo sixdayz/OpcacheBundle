@@ -59,7 +59,7 @@ Clear all opcache cache:
 Capifony usage
 ==============
 
-To automatically clear apc cache after each capifony deploy you can define a custom task
+To automatically clear opcache cache after each capifony deploy you can define a custom task
 
 ```ruby
 namespace :symfony do
@@ -75,14 +75,14 @@ end
 and add this hook
 
 ```ruby
-# apc
+# opcache
 after "deploy", "symfony:clear_opcache"
 ```
 
 Nginx configuration
 ===================
 
-If you are using nginx and limiting PHP scripts that you are passing to fpm you need to allow 'apc' prefixed php files. Otherwise your web server will return the requested PHP file as text and the system won't be able to clear the apc cache.
+If you are using nginx and limiting PHP scripts that you are passing to fpm you need to allow 'opcache' prefixed php files. Otherwise your web server will return the requested PHP file as text and the system won't be able to clear the opcache cache.
 
 Example configuration:
 ```
