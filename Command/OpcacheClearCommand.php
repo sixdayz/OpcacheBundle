@@ -77,6 +77,10 @@ class OpcacheClearCommand extends ContainerAwareCommand
         $result = json_decode($result, true);
         unlink($file);
 
+        if (! $result) {
+            throw new \RuntimeException(sprintf('The response did not return valid json: %s', $result));
+        }
+
         if($result['success']) {
             $output->writeln($result['message']);
         } else {
