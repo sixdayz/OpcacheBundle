@@ -46,8 +46,17 @@ Installation
               host_ip:    127.0.0.1:80
               host_name:  example.com
               web_dir:    %kernel.root_dir%/../web
+              protocol:   http
 
+  3. Or when you're using SSL:
 
+          # app/config/config.yml
+          sixdays_opcache:
+              host_ip:    127.0.0.1:443
+              host_name:  example.com
+              web_dir:    %kernel.root_dir%/../web
+              protocol:   https
+              
 Usage
 =====
 
