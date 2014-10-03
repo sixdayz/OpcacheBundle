@@ -14,7 +14,9 @@ class OpcacheClearCommand extends ContainerAwareCommand
         $this->setDescription('Clear opcache cache')
             ->setName('opcache:clear')
             ->addOption('host-name', null, InputOption::VALUE_REQUIRED, 'Url for clear opcode cache')
-            ->addOption('host-ip', null, InputOption::VALUE_REQUIRED, 'IP for clear opcode cache');
+            ->addOption('host-ip', null, InputOption::VALUE_REQUIRED, 'IP for clear opcode cache')
+            ->addOption('protocol', null, InputOption::VALUE_REQUIRED, 'Whether to use http or https');
+
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -26,6 +28,9 @@ class OpcacheClearCommand extends ContainerAwareCommand
         $hostIp     = $input->getOption('host-ip')
             ? $input->getOption('host-ip')
             : $this->getContainer()->getParameter('sixdays_opcache.host_ip');
+        $protocol   = $input->getOption('protocol')
+            ? $input->getOption('protocol')
+            : $this->getContainer()->getParameter('sixdays_opcache.protocol');
 
         if (!is_dir($webDir)) {
             throw new \InvalidArgumentException(sprintf('Web dir does not exist "%s"', $webDir));
@@ -45,7 +50,7 @@ class OpcacheClearCommand extends ContainerAwareCommand
             throw new \RuntimeException(sprintf('Unable to write "%s"', $file));
         }
 
-        $url = sprintf('http://%s/%s', $hostIp, $filename);
+        $url = sprintf('%s://%s/%s', $protocol, $hostIp, $filename);
 
         $ch = curl_init();
         curl_setopt_array($ch, array(
@@ -54,7 +59,8 @@ class OpcacheClearCommand extends ContainerAwareCommand
             CURLOPT_FAILONERROR     => true,
             CURLOPT_HTTPHEADER      => [ sprintf('Host: %s', $hostName) ],
             CURLOPT_HEADER          => false,
-            CURLOPT_SSL_VERIFYPEER  => false
+            CURLOPT_SSL_VERIFYPEER  => false,
+            CURLOPT_SSL_VERIFYHOST  => false
         ));
 
         $result = curl_exec($ch);

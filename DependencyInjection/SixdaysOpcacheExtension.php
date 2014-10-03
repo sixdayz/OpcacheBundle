@@ -17,5 +17,6 @@ class SixdaysOpcacheExtension extends Extension
         $container->setParameter('sixdays_opcache.host_ip', $config['host_ip']);
         $container->setParameter('sixdays_opcache.host_name', $config['host_name']);
         $container->setParameter('sixdays_opcache.web_dir', $config['web_dir']);
+        $container->setParameter('sixdays_opcache.protocol', $config['protocol']);
     }
 }
