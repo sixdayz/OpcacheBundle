@@ -52,11 +52,9 @@ Installation
 
           # app/config/config.yml
           sixdays_opcache:
-              host_ip:    127.0.0.1:443
-              host_name:  example.com
+              base_url:   http://localhost/ #could also be https://, or http://127.0.0.1:8000/, or any other valid URL
               web_dir:    %kernel.root_dir%/../web
-              protocol:   https
-              
+
 Usage
 =====
 
@@ -101,4 +99,4 @@ server {
   location ~ ^/(app|app_dev|opcache-.*)\.php(/|$) { { # This will allow opcache (opcache-{MD5HASH}.php) files to be processed by fpm
     fastcgi_pass                127.0.0.1:9000;
     ...
-``` 
+```

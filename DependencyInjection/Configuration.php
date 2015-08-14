@@ -24,10 +24,8 @@ class Configuration
         $treeBuilder->root('sixdays_opcache', 'array')
             ->isRequired()
             ->children()
-                ->scalarNode('host_ip')->isRequired()->end()
-                ->scalarNode('host_name')->isRequired()->end()
+                ->scalarNode('base_url')->isRequired()->end()
                 ->scalarNode('web_dir')->isRequired()->end()
-                ->enumNode('protocol')->values(array('http', 'https'))->defaultValue('http')->end()
             ->end()
         ->end();
 

@@ -13,24 +13,16 @@ class OpcacheClearCommand extends ContainerAwareCommand
     {
         $this->setDescription('Clear opcache cache')
             ->setName('opcache:clear')
-            ->addOption('host-name', null, InputOption::VALUE_REQUIRED, 'Url for clear opcode cache')
-            ->addOption('host-ip', null, InputOption::VALUE_REQUIRED, 'IP for clear opcode cache')
-            ->addOption('protocol', null, InputOption::VALUE_REQUIRED, 'Whether to use http or https');
+            ->addOption('base-url', null, InputOption::VALUE_REQUIRED, 'Url for clear opcode cache');
 
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $webDir     = $this->getContainer()->getParameter('sixdays_opcache.web_dir');
-        $hostName   = $input->getOption('host-name')
-            ? $input->getOption('host-name')
-            : $this->getContainer()->getParameter('sixdays_opcache.host_name');
-        $hostIp     = $input->getOption('host-ip')
-            ? $input->getOption('host-ip')
-            : $this->getContainer()->getParameter('sixdays_opcache.host_ip');
-        $protocol   = $input->getOption('protocol')
-            ? $input->getOption('protocol')
-            : $this->getContainer()->getParameter('sixdays_opcache.protocol');
+        $baseUrl   = $input->getOption('base-url')
+            ? $input->getOption('base-url')
+            : $this->getContainer()->getParameter('sixdays_opcache.base_url');
 
         if (!is_dir($webDir)) {
             throw new \InvalidArgumentException(sprintf('Web dir does not exist "%s"', $webDir));
@@ -50,7 +42,7 @@ class OpcacheClearCommand extends ContainerAwareCommand
             throw new \RuntimeException(sprintf('Unable to write "%s"', $file));
         }
 
-        $url = sprintf('%s://%s/%s', $protocol, $hostName, $filename);
+        $url = sprintf('%s/%s', $baseUrl, $filename);
 
         $ch = curl_init();
         curl_setopt_array($ch, array(
