@@ -50,14 +50,13 @@ class OpcacheClearCommand extends ContainerAwareCommand
             throw new \RuntimeException(sprintf('Unable to write "%s"', $file));
         }
 
-        $url = sprintf('%s://%s/%s', $protocol, $hostIp, $filename);
+        $url = sprintf('%s://%s/%s', $protocol, $hostName, $filename);
 
         $ch = curl_init();
         curl_setopt_array($ch, array(
             CURLOPT_URL             => $url,
             CURLOPT_RETURNTRANSFER  => true,
             CURLOPT_FAILONERROR     => true,
-            CURLOPT_HTTPHEADER      => [ sprintf('Host: %s', $hostName) ],
             CURLOPT_HEADER          => false,
             CURLOPT_SSL_VERIFYPEER  => false,
             CURLOPT_SSL_VERIFYHOST  => false
