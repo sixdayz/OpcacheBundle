@@ -43,15 +43,6 @@ Installation
 
           # app/config/config.yml
           sixdays_opcache:
-              host_ip:    127.0.0.1:80
-              host_name:  example.com
-              web_dir:    %kernel.root_dir%/../web
-              protocol:   http
-
-  3. Or when you're using SSL:
-
-          # app/config/config.yml
-          sixdays_opcache:
               base_url:   http://localhost/ #could also be https://, or http://127.0.0.1:8000/, or any other valid URL
               web_dir:    %kernel.root_dir%/../web
 
