@@ -3,7 +3,7 @@
 if (!extension_loaded('opcache')) {
     $success = false;
     $message = 'Opcode cache extension not loaded';
-} if (opcache_reset()) {
+} else if (opcache_reset()) {
     $success = true;
     $message = 'Opcode cache clear: success';
 } else {
