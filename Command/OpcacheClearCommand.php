@@ -13,7 +13,9 @@ class OpcacheClearCommand extends ContainerAwareCommand
     {
         $this->setDescription('Clear opcache cache')
             ->setName('opcache:clear')
-            ->addOption('base-url', null, InputOption::VALUE_REQUIRED, 'Url for clear opcode cache');
+            ->addOption('base-url', null, InputOption::VALUE_REQUIRED, 'Url for clear opcode cache')
+            ->addOption('retry', null, InputOption::VALUE_REQUIRED, 'How many times the clearing should be retried if it fails')
+            ->addOption('retry-timeout', null, InputOption::VALUE_REQUIRED, 'Timeout between retries in milliseconds');
 
     }
 
@@ -42,28 +44,37 @@ class OpcacheClearCommand extends ContainerAwareCommand
             throw new \RuntimeException(sprintf('Unable to write "%s"', $file));
         }
 
+        $error = null;
+        $retries = intval($input->getOption('retry')) ?: 1;
         $url = sprintf('%s/%s', $baseUrl, $filename);
 
-        $ch = curl_init();
-        curl_setopt_array($ch, array(
-            CURLOPT_URL             => $url,
-            CURLOPT_RETURNTRANSFER  => true,
-            CURLOPT_FAILONERROR     => true,
-            CURLOPT_HEADER          => false,
-            CURLOPT_SSL_VERIFYPEER  => false,
-            CURLOPT_SSL_VERIFYHOST  => false
-        ));
+        for ($i = 0; $i <= $retries; $i++) {
+            $ch = curl_init();
+            curl_setopt_array($ch, array(
+                CURLOPT_URL             => $url,
+                CURLOPT_RETURNTRANSFER  => true,
+                CURLOPT_FAILONERROR     => true,
+                CURLOPT_HEADER          => false,
+                CURLOPT_SSL_VERIFYPEER  => false,
+                CURLOPT_SSL_VERIFYHOST  => false
+            ));
 
-        $result = curl_exec($ch);
-
-        if (curl_errno($ch)) {
+            $result = curl_exec($ch);
             $error = curl_error($ch);
             curl_close($ch);
+
+            if (!$error) {
+                break;
+            } elseif ($timeout = intval($input->getOption('retry-timeout'))) {
+                // usleep is working with microseconds, so we have to multiply with 1000
+                usleep($timeout * 1000);
+            }
+        }
+
+        if ($error) {
             unlink($file);
             throw new \RuntimeException(sprintf('Curl error reading "%s": %s', $url, $error));
         }
-
-        curl_close($ch);
 
         $result = json_decode($result, true);
         unlink($file);
